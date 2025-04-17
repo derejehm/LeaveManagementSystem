@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace LeaveManagementSystem.Web.Data.Migrations
+namespace LeaveManagementSystem.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -67,6 +67,26 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "454892ac-73a6-4cf5-9c40-c49e3cba660d",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "85529c34-d8ab-4d52-a5e0-48875a4ba457",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        },
+                        new
+                        {
+                            Id = "71e66fc7-6328-4782-98d2-34233e3822e5",
+                            Name = "Supervisor",
+                            NormalizedName = "SUPERVISOR"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -105,6 +125,11 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("nvarchar(21)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -157,6 +182,10 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("IdentityUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -221,6 +250,13 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "91c0052b-1143-4621-b11b-137416a78c73",
+                            RoleId = "454892ac-73a6-4cf5-9c40-c49e3cba660d"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -242,6 +278,45 @@ namespace LeaveManagementSystem.Web.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("LeaveManagementSystem.Web.Data.ApplicationUser", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("ApplicationUser");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "91c0052b-1143-4621-b11b-137416a78c73",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "88426ce8-98c9-4d33-9d5b-132cac69b512",
+                            Email = "hailemariam013@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "HAILEMARIAM013@GMAIL.COM",
+                            NormalizedUserName = "HAILEMARIAM013@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPHHveOuaVvKeSdveIKiD3/x8Qm02r4QmB9ei/q3clb/f9vyVJpWfW139lvbAkR0RQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "482d6e25-266b-419b-933d-d25ebe22cfe8",
+                            TwoFactorEnabled = false,
+                            UserName = "hailemariam013@gmail.com",
+                            DateOfBirth = new DateOnly(1995, 1, 1),
+                            FirstName = "Default",
+                            LastName = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
