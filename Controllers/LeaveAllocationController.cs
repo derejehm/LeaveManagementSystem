@@ -12,7 +12,7 @@ namespace LeaveManagementSystem.Web.Controllers
     [Authorize]
     public class LeaveAllocationController(ILeaveAllocationServices _leaveAllocationServices,ILeaveTypesService _leaveTypesService) : Controller
     {
-        [Authorize(Roles =Roles.Administrator)]
+        
         public async Task<IActionResult> Index()
         {
             var employees = await _leaveAllocationServices.GetEmployees();
