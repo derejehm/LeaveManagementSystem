@@ -1,0 +1,37 @@
+﻿@model LeaveAllocationEditVM
+
+@{
+    ViewData["Title"] = "Edit Allocation";
+}
+
+<h1>Editing @Model.LeaveType?.Name Allocation for @Model.Employee.FirstName @Model.Employee.LastName </h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="EditAllocation">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="LeaveType.Id" />
+            <input type="hidden" asp-for="Employee.Id" />
+
+            <div class="form-group">
+                <label asp-for="Days" class="control-label"></label>
+                <input asp-for="Days" class="form-control" />
+                <span asp-validation-for="Days" class="text-danger"></span>
+            </div>
+            <br />            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-primary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
