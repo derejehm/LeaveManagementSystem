@@ -13,14 +13,15 @@ namespace LeaveManagementSystem.Web.Controllers
         // Employee View Request
         public async Task<IActionResult> Index()
         {
-            return View();
+            var model= await _leaveRequestsService.GetEmployeeLeaveRequests();
+            return View(model);
         }
 
         // Employee Create Requests
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? leaveTypeId)
         {
             var leaveTypes = await _leaveTypesService.GetAllLeaveTypesAsync();
-            var leaveTypeSelectList = new SelectList(leaveTypes, "Id", "Name");
+            var leaveTypeSelectList = new SelectList(leaveTypes, "Id", "Name", leaveTypeId);
             var model = new LeaveRequestCreateVM
             {
                 StartDate = DateOnly.FromDateTime(DateTime.Now),
@@ -54,22 +55,38 @@ namespace LeaveManagementSystem.Web.Controllers
         }
 
         //Employee Cancel Requests
-        public async Task<IActionResult> Cancel(int leaveRequestId)
+        public async Task<IActionResult> Cancel(int id)
         {
-            return View();
+          await  _leaveRequestsService.CancelLeaveRequest(id);
+            return RedirectToAction(nameof(Index));
+            
         }
 
 
         //Admin/Sup review request
+        [Authorize(policy: "AdminSupervisorOnly")]
         public async Task<IActionResult> ListRequests()
         {
-            return View();
+          var model=  await _leaveRequestsService.GetAllLeaveRequests();
+            return View(model);
         }
 
         //Admin/Sup review request
-        public async Task<IActionResult> Review(int leaveRequestId)
+        [Authorize(policy: "AdminSupervisorOnly")]
+        public async Task<IActionResult> Review(int id)
         {
-            return View();
+
+            var model = await _leaveRequestsService.GetLeaveRequestForReview(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Review(int id,bool approved)
+        {
+          await  _leaveRequestsService.ReviewLeaveRequest(id, approved);
+            return RedirectToAction(nameof(ListRequests));
+          
         }
     }
 }

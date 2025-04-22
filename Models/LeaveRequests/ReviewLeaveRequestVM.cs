@@ -1,6 +1,13 @@
-﻿namespace LeaveManagementSystem.Web.Models.LeaveRequests
+﻿using System.ComponentModel;
+
+namespace LeaveManagementSystem.Web.Models.LeaveRequests
 {
-    public class ReviewLeaveRequestVM
+    public class ReviewLeaveRequestVM :LeaveRequestListVM
     {
+
+        public EmployeeListVM Employee { get; set; } =new EmployeeListVM();
+
+        [DisplayName("Additional Information")]
+        public string RequestComments { get; set; }
     }
 }
