@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using LeaveManagementSystem.Web;
+
 namespace LeaveManagementSystem.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel

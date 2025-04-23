@@ -1,16 +1,7 @@
-﻿using LeaveManagementSystem.Web.Commen;
-using LeaveManagementSystem.Web.Models.LeaveAllocations;
-using LeaveManagementSystem.Web.Models.LeaveType;
-using LeaveManagementSystem.Web.Services.LeaveAllocations;
-using LeaveManagementSystem.Web.Services.LeaveTypes;
-using Microsoft.AspNetCore.Mvc;
-using SQLitePCL;
-using System.Threading.Tasks;
-
-namespace LeaveManagementSystem.Web.Controllers
+﻿namespace LeaveManagementSystem.Web.Controllers
 {
     [Authorize]
-    public class LeaveAllocationController(ILeaveAllocationServices _leaveAllocationServices,ILeaveTypesService _leaveTypesService) : Controller
+    public class LeaveAllocationController(ILeaveAllocationServices _leaveAllocationServices,ILeaveTypesService _leaveTypesService,ILogger _logger) : Controller
     {
         [Authorize(Roles = Roles.Administrator)]
         public async Task<IActionResult> Index()
@@ -56,6 +47,7 @@ namespace LeaveManagementSystem.Web.Controllers
             if (ModelState.IsValid)
             {
                 await _leaveAllocationServices.EditAllocation(leaveAllocationEditVM);
+                _logger.LogInformation("Leave allocation updated successfully");
                 return RedirectToAction(nameof(Details), new { userId = leaveAllocationEditVM.Employee.Id });
             }
             var days = leaveAllocationEditVM.Days;
